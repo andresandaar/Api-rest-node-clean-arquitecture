@@ -1,30 +1,39 @@
 
-import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response, Router } from 'express';
 
-interface Options{
-    port?:number
+interface Options {
+  port?: number,
+  routes: Router
 }
 
 export class Server {
-  public readonly app: Application;
-  private PORT: number;
+  public readonly app: Application=express();;
+  private port: number;
+  private readonly routes: Router;
 
-  constructor(options:Options) {
-    const {port = 3000} = options;
-    this.app = express();
-    this.PORT =port ;
-    this.configureRoutes();
+  constructor(options: Options) {
+    const { port = 3001, routes } = options;
+    this.port = port;
+    this.routes = routes;
   }
 
   private configureRoutes() {
-    this.app.get('/', (req: Request, res: Response) => {
-      res.send('Hello, World!');
-    });
+    this.app.use(this.routes);
+  }
+  
+  private configureMiddlewares(){
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({extended:true}));
   }
 
   async startServer(): Promise<void> {
-    this.app.listen(this.PORT, () => {
-      console.log(`Server is listening on port ${this.PORT}`);
+    //Middlewares
+    this.configureMiddlewares()
+    //Usar las rutas definidas
+    this.configureRoutes() 
+    //Inicializar el servidor 
+    this.app.listen(this.port, () => {
+      console.log(`Server is listening on port ${this.port}`);
     });
   }
 };
