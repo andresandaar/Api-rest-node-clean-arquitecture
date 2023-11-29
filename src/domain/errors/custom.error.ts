@@ -4,6 +4,7 @@
         public readonly message:string,
     ) {
         super(message)
+        
     }
 
     static badRequest(message:string){

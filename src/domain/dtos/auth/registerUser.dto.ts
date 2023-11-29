@@ -25,7 +25,6 @@ export class RegisterUserDto {
         const name = object.name?.trim();
         const email = object.email?.trim();
         const password = object.password?.trim()?.replace(/\s/g, '');
-        console.log(object)
 
         if (!name || !email || !password) {
             return [!name ? 'Missing name' : !email ? 'Missing email' : !password ? 'Missing password' : '']

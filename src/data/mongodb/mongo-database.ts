@@ -4,17 +4,18 @@ interface Options {
   dbName: string;
 }
 export class MongoDatabase {
-  static async connect(options: Options) {
+  static connect = async (options: Options) => {
+
     const { dbName, mongoUrl } = options;
     try {
       await mongoose.connect(mongoUrl, {
         dbName: dbName
       });
-      console.log('Mongo connected')
+      console.log('Mongo connected');
       return true;
     } catch (error) {
       console.error('Mongo connection error');
       throw error;
     }
-  }
+  };
 }
