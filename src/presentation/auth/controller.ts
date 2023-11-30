@@ -3,7 +3,9 @@ import {
   AuthRepository,
   CustomError,
   RegisterUser,
-  RegisterUserDto
+  LoginUser,
+  RegisterUserDto,
+  LoginUserDto
 } from '../../domain';
 import { UserModel } from '../../data/mongodb';
 
@@ -39,9 +41,15 @@ export class AuthController {
   };
 
   loginUser = (req: Request, res: Response) => {
-    res.json('Desde el login');
+        const [error, loginUserDto] = LoginUserDto.create(req.body);
+        if (error) return res.status(401).json({ error });
+        new LoginUser(this.authRepository)
+          .execute(loginUserDto!)
+          .then((data) => res.json(data))
+          .catch((error) => this.handleError(error, res));
   };
 
+//Esto se tiene que corregir
   getUsers = (req: Request, res: Response) => {
     UserModel.find()
       .then((users) => {
@@ -49,4 +57,5 @@ export class AuthController {
       })
       .catch(() => res.status(500).json({ error: 'Internal server error' }));
   };
+
 }
