@@ -25,17 +25,19 @@ export class AuthDatasourceImpl implements AuthDatasource {
           `El usuario con el correo ${email}  ya existe en la base de datos`
         );
 
-      const user = await UserModel.create({
-        name: name,
-        email: email,
-        password: this.hashPassword(password)
-      });
-      await user.save();
-      //hash de contraseña
+        //hash de contraseña
+        const user = await UserModel.create({
+          name: name,
+          email: email,
+          password: this.hashPassword(password)
+        });
+        await user.save();
       //mapear la respuesta a nuestra entidad
+
       return new UserEntity(user.id, name, email, user.password, [
         'ADMIN_ROLE'
       ]);
+      
     } catch (error) {
       if (error instanceof CustomError) {
         /* console.log('okerror',error) */
