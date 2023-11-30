@@ -6,6 +6,7 @@ import {
 } from '../../domain';
 import { UserModel } from '../../data/mongodb/index';
 import { BcryptAdapter } from '../../config';
+import { UserMapper } from '../../infrastructure';
 type HashFuntion = (passwordFlat: string) => string;
 type CompareFuntion = (passwordFlat: string, hashed: string)=>boolean;
 
@@ -22,7 +23,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
       const exists = await UserModel.findOne({ email });
       if (exists)
         throw CustomError.badRequest(
-          `El usuario con el correo ${email}  ya existe en la base de datos`
+          `Las Credenciales no son correctas (-quita-email)`
         );
 
         //hash de contraseña
@@ -33,10 +34,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
         });
         await user.save();
       //mapear la respuesta a nuestra entidad
-
-      return new UserEntity(user.id, name, email, user.password, [
-        'ADMIN_ROLE'
-      ]);
+      return UserMapper.userEntityFromObject(user);
       
     } catch (error) {
       if (error instanceof CustomError) {

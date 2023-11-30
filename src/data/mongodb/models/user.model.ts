@@ -21,7 +21,7 @@ const UserSchema = new Schema(
       minlength: 6
     },
     img: { type: String},
-    role: { type: [String],default:['USER_ROLE'] , enum:['USER_ROLE','ADMIN_ROLE'] }
+    roles: { type: [String],default:['USER_ROLE'] , enum:['USER_ROLE','ADMIN_ROLE'] }
   },
   {
     timestamps: true,
