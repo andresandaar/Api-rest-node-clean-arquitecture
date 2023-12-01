@@ -1,7 +1,8 @@
-import { Schema, model } from 'mongoose';
+import { Model, Schema, model } from 'mongoose';
+import { User } from '../interfaces/user.interface';
 
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<User>(
   {
     //_id: {    type: String, _id:false},
     name: {
@@ -20,14 +21,18 @@ const UserSchema = new Schema(
       required: [true, 'Password is required'],
       minlength: 6
     },
-    img: { type: String},
-    roles: { type: [String],default:['USER_ROLE'] , enum:['USER_ROLE','ADMIN_ROLE'] }
+    img: { type: String },
+    roles: {
+      type: [String],
+      default: ['USER_ROLE'],
+      enum: ['USER_ROLE', 'ADMIN_ROLE']
+    }
   },
   {
     timestamps: true,
     versionKey: false
   }
 );
-export const UserModel = model('User', UserSchema);
+export const UserModel: Model<User> = model('User', UserSchema);
 
 

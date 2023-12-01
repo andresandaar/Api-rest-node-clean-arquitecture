@@ -10,6 +10,7 @@ import {
 import { UserModel } from '../../data/mongodb';
 
 export class AuthController {
+
   constructor(private readonly authRepository: AuthRepository) {}
 
   private handleError = (error: unknown, res: Response) => {
@@ -43,6 +44,7 @@ export class AuthController {
   loginUser = (req: Request, res: Response) => {
         const [error, loginUserDto] = LoginUserDto.create(req.body);
         if (error) return res.status(401).json({ error });
+        //Caso de uso LoginUser
         new LoginUser(this.authRepository)
           .execute(loginUserDto!)
           .then((data) => res.json(data))

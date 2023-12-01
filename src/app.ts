@@ -8,11 +8,18 @@ import { Server } from './presentation/server';
 })();
 
 async function main() {
+  // DB configuration and connection create
   // Await base de datos
-  await MongoDatabase.connect({
-    dbName: envs.MONGO_DB_NAME,
-    mongoUrl: envs.MONGO_URL
-  });
+  const mongoDatabase = new MongoDatabase(
+    {
+      uri: envs.MONGO_URL,
+      options: {
+        dbName: envs.MONGO_DB_NAME,
+      }
+    }
+  );
+
+  await mongoDatabase.connect();
 
   //Inicio del server express
   const server = new Server({
